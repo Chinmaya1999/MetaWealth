@@ -1,0 +1,10 @@
+import { describe, it, expect } from "vitest";
+import { nriPlan } from "./nri";
+describe("nriPlan", () => {
+  it("with 0% return and 0% depreciation the corpus is just the amount remitted", () => { const r = nriPlan({ currency: "USD", fxRate: 80, inrDepreciationPct: 0, monthlyRemittance: 1000, years: 5, returnPct: 0 }); expect(r.corpusInr).toBe(1000 * 80 * 60); expect(r.totalRemitted).toBe(60000); expect(r.gain).toBe(0); });
+  it("matches the closed-form annuity when FX is flat", () => { const r = nriPlan({ currency: "USD", fxRate: 80, inrDepreciationPct: 0, monthlyRemittance: 1000, years: 10, returnPct: 12 }); const rm = 1.12 ** (1 / 12) - 1; const fv = 80000 * (((1 + rm) ** 120 - 1) / rm); expect(Math.abs(r.corpusInr - fv) / fv).toBeLessThan(1e-9); });
+  it("required remittance reproduces the target", () => { const a = nriPlan({ currency: "AED", fxRate: 22.6, inrDepreciationPct: 2, years: 12, returnPct: 10, targetInr: 5e7, existingInr: 1e6 }); const b = nriPlan({ currency: "AED", fxRate: 22.6, inrDepreciationPct: 2, years: 12, returnPct: 10, monthlyRemittance: a.requiredMonthlyRemittance!, existingInr: 1e6 }); expect(Math.abs(b.corpusInr - 5e7)).toBeLessThan(50); });
+  it("depreciation raises INR corpus and is never negative-corpus", () => { const f = nriPlan({ currency: "USD", fxRate: 83, inrDepreciationPct: 0, monthlyRemittance: 500, years: 8, returnPct: 9 }), d = nriPlan({ currency: "USD", fxRate: 83, inrDepreciationPct: 3, monthlyRemittance: 500, years: 8, returnPct: 9 }); expect(d.corpusInr).toBeGreaterThan(f.corpusInr); expect(d.yearly).toHaveLength(8); });
+  it("target already met by existing savings needs zero remittance", () => { expect(nriPlan({ currency: "USD", fxRate: 83, inrDepreciationPct: 3, years: 10, returnPct: 10, targetInr: 1e6, existingInr: 1e7 }).requiredMonthlyRemittance).toBe(0); });
+  it("rejects bad input", () => { expect(() => nriPlan({ currency: "USD", fxRate: 0, inrDepreciationPct: 0, years: 5, returnPct: 8 })).toThrow(); expect(() => nriPlan({ currency: "USD", fxRate: 80, inrDepreciationPct: 0, years: 0, returnPct: 8 })).toThrow(); });
+});

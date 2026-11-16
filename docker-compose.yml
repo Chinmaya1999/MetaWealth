@@ -1,0 +1,22 @@
+# Local production-like stack:  docker compose up --build
+# Put the variables from backend/.env.example in a root .env file (never commit it).
+services:
+  api:
+    build: { context: ., dockerfile: infrastructure/docker/backend.Dockerfile }
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:8080}
+      MONGODB_URI: ${MONGODB_URI}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      SMTP_URL: ${SMTP_URL:-}
+    volumes: [ "uploads:/app/backend/storage" ]
+    restart: unless-stopped
+  web:
+    build: { context: ., dockerfile: infrastructure/docker/frontend.Dockerfile }
+    ports: [ "8080:80" ]
+    depends_on: [ api ]
+    restart: unless-stopped
+volumes: { uploads: {} }

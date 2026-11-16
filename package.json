@@ -1,0 +1,14 @@
+{
+  "name": "metawealth-capital",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["backend", "backend/packages/*", "frontend"],
+  "scripts": {
+    "dev:backend": "npm run dev -w @mwc/api",
+    "dev:frontend": "npm run dev -w @mwc/web",
+    "seed": "npm run seed -w @mwc/api",
+    "build:frontend": "npm run build -w @mwc/web",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}
