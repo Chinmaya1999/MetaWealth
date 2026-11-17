@@ -7,7 +7,7 @@ import { AlertTriangle, CheckCircle2, ClipboardList, Eye, FileText, Sparkles, Ta
 import { inr, inrFull } from "../lib/format";
 
 const SEV: any = { Urgent: { icon: AlertTriangle, cls: "bg-red-100 text-danger" }, Review: { icon: Eye, cls: "bg-amber-100 text-warning" }, "On track": { icon: CheckCircle2, cls: "bg-green-100 text-success" } };
-const SEG = [["living", "Living", "#C7A45B"], ["emi", "Loan EMIs", "#E8CE92"], ["premiums", "Premiums", "#F0B38A"], ["taxes", "Taxes", "#9AA7C4"], ["savings", "Savings (PF etc.)", "#6D86B9"], ["surplus", "Free surplus", "#9CC27A"]] as const;
+const SEG = [["living", "Living", "#55B848"], ["emi", "Loan EMIs", "#E8CE92"], ["premiums", "Premiums", "#F0B38A"], ["taxes", "Taxes", "#9AA7C4"], ["savings", "Savings (PF etc.)", "#6D86B9"], ["surplus", "Free surplus", "#9CC27A"]] as const;
 
 const Card = ({ title, sub, right, children, className = "" }: any) => (
   <section className={`clay p-5 h-full min-w-0 ${className}`}>
@@ -19,13 +19,13 @@ const Seg = ({ value, onChange, options }: any) => (<div className="clay-inset p
 
 function Gauge({ value }: { value: number }) {
   return (<div className="relative mx-auto w-[220px]">
-    <svg viewBox="0 0 200 110" className="w-full"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stopColor="#F0B38A" /><stop offset=".55" stopColor="#C7A45B" /><stop offset="1" stopColor="#9CC27A" /></linearGradient></defs>
+    <svg viewBox="0 0 200 110" className="w-full"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stopColor="#F0B38A" /><stop offset=".55" stopColor="#55B848" /><stop offset="1" stopColor="#9CC27A" /></linearGradient></defs>
       <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E7E4DB" strokeWidth="16" strokeLinecap="round" pathLength="100" />
       <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#g)" strokeWidth="16" strokeLinecap="round" pathLength="100" strokeDasharray={`${Math.max(1, value)} 100`} /></svg>
     <div className="absolute inset-x-0 bottom-1 text-center"><div className="text-3xl font-semibold text-navy tabular-nums">{value}<span className="text-base text-muted">/100</span></div></div>
   </div>);
 }
-function Ring({ pct, color = "#C7A45B", size = 74, children }: any) {
+function Ring({ pct, color = "#55B848", size = 74, children }: any) {
   const c = 2 * Math.PI * 30, v = Math.max(0, Math.min(100, pct));
   return (<div className="relative" style={{ width: size, height: size }}><svg viewBox="0 0 70 70" className="-rotate-90" width={size} height={size}><circle cx="35" cy="35" r="30" fill="none" stroke="#E7E4DB" strokeWidth="9" /><circle cx="35" cy="35" r="30" fill="none" stroke={color} strokeWidth="9" strokeLinecap="round" strokeDasharray={`${(v / 100) * c} ${c}`} /></svg><div className="absolute inset-0 grid place-items-center text-sm font-semibold text-navy">{children}</div></div>);
 }
@@ -35,7 +35,7 @@ export default function Dashboard({ r }: { r: any }) {
   const cf = r.cashflow.nextYear, proj = r.cashflow.projection.slice(0, +range);
   const stack = proj.map((p: any) => ({ year: p.year, income: p.income, expense: p.expense, surplus: Math.max(0, p.surplus), savings: Math.max(0, p.income - p.expense - Math.max(0, p.surplus)) }));
   const MUTE = "#EDEBE5";
-  const Tip = ({ active: a, payload }: any) => { if (!a || !payload?.length) return null; const d = payload[0].payload; return (<div className="bg-white rounded-xl shadow-[0_12px_30px_-10px_rgba(16,29,53,.3)] p-3 text-[11px] min-w-[150px]"><div className="text-muted mb-1.5">Year {d.year}</div>{[["Savings", d.savings, "#C7A45B"], ["Income", d.income, "#9CC27A"], ["Expenses", d.expense, "#F0B38A"]].map(([l, v, c]: any) => <div key={l} className="flex items-center justify-between gap-4 py-0.5"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-sm" style={{ background: c }} />{l}</span><b className="text-navy tabular-nums">{inr(v)}</b></div>)}</div>); };
+  const Tip = ({ active: a, payload }: any) => { if (!a || !payload?.length) return null; const d = payload[0].payload; return (<div className="bg-white rounded-xl shadow-[0_12px_30px_-10px_rgba(26,88,118,.3)] p-3 text-[11px] min-w-[150px]"><div className="text-muted mb-1.5">Year {d.year}</div>{[["Savings", d.savings, "#55B848"], ["Income", d.income, "#9CC27A"], ["Expenses", d.expense, "#F0B38A"]].map(([l, v, c]: any) => <div key={l} className="flex items-center justify-between gap-4 py-0.5"><span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-sm" style={{ background: c }} />{l}</span><b className="text-navy tabular-nums">{inr(v)}</b></div>)}</div>); };
   const income = cf.income || 1, expense = cf.totalExpense;
   const seg: any = { living: cf.livingExpenses, emi: cf.loanEmis, premiums: cf.insurancePremiums, taxes: cf.taxes, savings: cf.committedSavingsPF + cf.otherCommittedSavings, surplus: Math.max(0, cf.discretionarySurplus) };
   const emergency = r.goals.find((g: any) => g.category === "emergency"); const liquid = r.netWorth.groups.liquid;
@@ -54,7 +54,7 @@ export default function Dashboard({ r }: { r: any }) {
   const longest = r.goals.reduce((bi: number, g: any, i: number) => ((g.series?.length ?? 0) > (r.goals[bi].series?.length ?? 0) ? i : bi), 0); // open on a multi-year goal, where the charts are most informative
   const gSel: number = Math.min(gPick ?? longest, r.goals.length - 1); const sel = r.goals[gSel];
   const holdings = [...(r.assetUsage ?? [])].sort((a: any, b: any) => b.nominal - a.nominal).slice(0, 5);
-  const tint = ["#C7A45B", "#6D86B9", "#9CC27A", "#F0B38A", "#9AA7C4"];
+  const tint = ["#55B848", "#6D86B9", "#9CC27A", "#F0B38A", "#9AA7C4"];
 
   return (<div className="grid xl:grid-cols-[minmax(0,1fr)_330px] gap-5">
     <div className="grid grid-cols-[minmax(0,1fr)] gap-5 min-w-0 content-start">
@@ -65,18 +65,18 @@ export default function Dashboard({ r }: { r: any }) {
             <div><div className="text-3xl font-semibold text-navy tabular-nums">{inr(r.netWorth.total)}</div><div className="text-[11px] text-muted">Net worth · {inr(r.netWorth.assets)} assets − {inr(r.netWorth.liabilities)} liabilities</div></div>
             <div className="flex gap-2"><Seg value={range} onChange={setRange} options={[["5", "5y"], ["10", "10y"]]} /><Seg value={kind} onChange={setKind} options={[["bars", "Bars"], ["line", "Line"]]} /></div>
           </div>
-          <div className="flex gap-4 text-[11px] text-muted my-2">{[["Savings", "#C7A45B"], ["Expenses", "#F0B38A"], ["Surplus", "#9CC27A"]].map(([l, c]) => <span key={l}><i className="inline-block w-2.5 h-2.5 rounded-sm mr-1.5" style={{ background: c }} />{l}</span>)}</div>
+          <div className="flex gap-4 text-[11px] text-muted my-2">{[["Savings", "#55B848"], ["Expenses", "#F0B38A"], ["Surplus", "#9CC27A"]].map(([l, c]) => <span key={l}><i className="inline-block w-2.5 h-2.5 rounded-sm mr-1.5" style={{ background: c }} />{l}</span>)}</div>
           <ResponsiveContainer width="100%" height={230}>
             {kind === "bars" ? <BarChart data={stack} barCategoryGap="22%" onMouseMove={(st: any) => { if (st?.activeTooltipIndex != null) setActive(+st.activeTooltipIndex); }}><CartesianGrid stroke="#E7E4DB" vertical={false} /><XAxis dataKey="year" fontSize={11} tickLine={false} axisLine={false} /><YAxis tickFormatter={(v) => inr(v)} fontSize={10} width={74} tickLine={false} axisLine={false} /><Tooltip content={<Tip />} cursor={false} />
-              <Bar isAnimationActive={false} dataKey="savings" stackId="a">{stack.map((_: any, i: number) => <Cell key={i} fill={i === active ? "#C7A45B" : MUTE} />)}</Bar>
+              <Bar isAnimationActive={false} dataKey="savings" stackId="a">{stack.map((_: any, i: number) => <Cell key={i} fill={i === active ? "#55B848" : MUTE} />)}</Bar>
               <Bar isAnimationActive={false} dataKey="expense" stackId="a">{stack.map((_: any, i: number) => <Cell key={i} fill={i === active ? "#F0B38A" : "#E6E3DB"} />)}</Bar>
               <Bar isAnimationActive={false} dataKey="surplus" stackId="a" radius={[10, 10, 0, 0]}>{stack.map((_: any, i: number) => <Cell key={i} fill={i === active ? "#9CC27A" : "#DFDCD3"} />)}</Bar></BarChart>
-              : <LineChart data={proj}><CartesianGrid stroke="#E7E4DB" vertical={false} /><XAxis dataKey="year" fontSize={11} tickLine={false} axisLine={false} /><YAxis tickFormatter={(v) => inr(v)} fontSize={10} width={74} tickLine={false} axisLine={false} /><Tooltip formatter={(v: any) => inrFull(v)} contentStyle={{ borderRadius: 14, border: "none", boxShadow: "0 12px 30px -10px rgba(16,29,53,.3)" }} />
-              <Line isAnimationActive={false} dataKey="income" stroke="#C7A45B" strokeWidth={3} dot={false} /><Line isAnimationActive={false} dataKey="expense" stroke="#F0B38A" strokeWidth={3} dot={false} /><Line isAnimationActive={false} dataKey="surplus" stroke="#9CC27A" strokeWidth={3} dot={false} /></LineChart>}
+              : <LineChart data={proj}><CartesianGrid stroke="#E7E4DB" vertical={false} /><XAxis dataKey="year" fontSize={11} tickLine={false} axisLine={false} /><YAxis tickFormatter={(v) => inr(v)} fontSize={10} width={74} tickLine={false} axisLine={false} /><Tooltip formatter={(v: any) => inrFull(v)} contentStyle={{ borderRadius: 14, border: "none", boxShadow: "0 12px 30px -10px rgba(26,88,118,.3)" }} />
+              <Line isAnimationActive={false} dataKey="income" stroke="#55B848" strokeWidth={3} dot={false} /><Line isAnimationActive={false} dataKey="expense" stroke="#F0B38A" strokeWidth={3} dot={false} /><Line isAnimationActive={false} dataKey="surplus" stroke="#9CC27A" strokeWidth={3} dot={false} /></LineChart>}
           </ResponsiveContainer>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 content-start">
-          {[["Total income", inr(cf.income), "next year", "#C7A45B"], ["Total expenses", inr(expense), `${Math.round((expense / income) * 100)}% of income`, "#F0B38A"], ["Monthly surplus", inr(r.summary.monthlySurplusNextYear), `${Math.max(0, Math.round((cf.discretionarySurplus / income) * 100))}% of income`, "#9CC27A"]].map(([k, v, s, c]) => (
+          {[["Total income", inr(cf.income), "next year", "#55B848"], ["Total expenses", inr(expense), `${Math.round((expense / income) * 100)}% of income`, "#F0B38A"], ["Monthly surplus", inr(r.summary.monthlySurplusNextYear), `${Math.max(0, Math.round((cf.discretionarySurplus / income) * 100))}% of income`, "#9CC27A"]].map(([k, v, s, c]) => (
             <div key={k} className="clay-flat p-3.5 border-l-4" style={{ borderLeftColor: c }}><div className="text-[11px] text-muted">{k}</div><div className="text-2xl font-semibold text-navy tabular-nums">{v}</div><div className="text-[11px] text-muted">{s}</div></div>))}
         </div>
       </div>
@@ -94,7 +94,7 @@ export default function Dashboard({ r }: { r: any }) {
       </div>
 
       <div className="grid sm:grid-cols-3 gap-5">
-        <Card title="Retirement readiness" sub={`Retire ${r.retirement.retirementYear}`}><div className="flex items-center gap-4"><Ring pct={retPct} color="#C7A45B">{retPct}%</Ring><div className="text-xs text-muted">Corpus needed<div className="text-base font-semibold text-navy">{inr(r.retirement.corpusRequired)}</div></div></div></Card>
+        <Card title="Retirement readiness" sub={`Retire ${r.retirement.retirementYear}`}><div className="flex items-center gap-4"><Ring pct={retPct} color="#55B848">{retPct}%</Ring><div className="text-xs text-muted">Corpus needed<div className="text-base font-semibold text-navy">{inr(r.retirement.corpusRequired)}</div></div></div></Card>
         <Card title="Protection" sub={`Life cover ${coverPct}% of need`}><div className="progress mt-3"><i style={{ width: `${coverPct}%`, backgroundImage: coverPct < 50 ? "linear-gradient(90deg,#F0B38A,#E58A5A)" : undefined }} /></div><div className="text-xs text-muted mt-2">Gap <b className="text-navy">{inr(cover.additionalTermCover)}</b> · health {cover.healthAdequate ? "adequate" : "below ₹10 L"}</div></Card>
         <Card title="Goals on track" sub={`${r.summary.goalsMet} of ${r.summary.goalsTotal} met`}><div className="flex flex-wrap gap-1.5 mt-2">{r.goals.map((g: any) => <i key={g.name} title={`${g.name}: ${g.status}`} className="h-4 w-4 rounded-md" style={{ background: g.status === "Met" ? "#9CC27A" : g.status === "Not met" ? "#E58A5A" : "#E8CE92" }} />)}</div></Card>
       </div>
@@ -125,7 +125,7 @@ export default function Dashboard({ r }: { r: any }) {
     </div>
 
     <aside className="grid grid-cols-[minmax(0,1fr)] gap-5 content-start min-w-0">
-      <div className="relative overflow-hidden rounded-xl3 p-5 text-white shadow-clay" style={{ background: "linear-gradient(135deg,#101D35 0%,#2b4570 60%,#C7A45B 135%)" }}>
+      <div className="relative overflow-hidden rounded-xl3 p-5 text-white shadow-clay" style={{ background: "linear-gradient(135deg,#1A5876 0%,#2b4570 60%,#55B848 135%)" }}>
         <div className="absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-white/10" /><div className="absolute right-10 -top-12 h-32 w-32 rounded-full bg-gold/30 blur-xl" />
         <div className="flex justify-between text-[11px] tracking-widest text-white/70"><span>RISK PROFILE</span><span>{rk ? `${rk.score}/40` : "—"}</span></div>
         <div className="text-2xl font-semibold mt-7">{rk ? rk.band : "Not completed"}</div>
@@ -134,7 +134,7 @@ export default function Dashboard({ r }: { r: any }) {
       </div>
       <Card title="Quick actions"><div className="grid grid-cols-5 gap-1.5">{[[ClipboardList, "Form", "/client/questionnaire"], [Target, "Goals", "/client/goals"], [Wallet, "Cash", "/client/cashflow"], [FileText, "Plan", "/client/plan"], [Sparkles, "Insights", "/client/insights"]].map(([I, l, to]: any) => <Link key={l} to={to} className="clay-btn py-2.5 grid place-items-center gap-1 text-[10px] text-muted"><I size={17} className="text-navy" />{l}</Link>)}</div>
         </Card>
-      {people.length > 0 && <Card title="Your family"><div className="flex gap-3 flex-wrap">{people.map((n: string, i: number) => <div key={n + i} className="text-center"><span className="h-11 w-11 rounded-full grid place-items-center text-xs font-semibold text-white shadow-clay" style={{ background: `linear-gradient(135deg,${tint[i % 5]},#101D35)` }}>{n.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}</span><div className="text-[10px] text-muted mt-1 max-w-[52px] truncate">{n.split(" ")[0]}</div></div>)}</div></Card>}
+      {people.length > 0 && <Card title="Your family"><div className="flex gap-3 flex-wrap">{people.map((n: string, i: number) => <div key={n + i} className="text-center"><span className="h-11 w-11 rounded-full grid place-items-center text-xs font-semibold text-white shadow-clay" style={{ background: `linear-gradient(135deg,${tint[i % 5]},#1A5876)` }}>{n.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()}</span><div className="text-[10px] text-muted mt-1 max-w-[52px] truncate">{n.split(" ")[0]}</div></div>)}</div></Card>}
       <Card title="Next actions" right={<Link to="/client/insights" className="text-[11px] text-muted hover:text-navy">View all</Link>}>
         <ul className="space-y-3">{actions.map((a: any) => { const S = SEV[a.severity]; const I = S.icon; return (<li key={a.id} className="flex items-center gap-3"><span className={`h-9 w-9 rounded-xl grid place-items-center shrink-0 ${S.cls}`}><I size={16} /></span><div className="min-w-0 flex-1"><div className="text-xs font-medium text-navy truncate">{a.title}</div><div className="text-[11px] text-muted truncate">{a.action}</div></div><span className="text-[10px] text-muted">{a.severity}</span></li>); })}</ul>
       </Card>

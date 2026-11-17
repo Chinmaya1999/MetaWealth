@@ -53,15 +53,15 @@ export default function LoginHero({ compact = false }: { compact?: boolean }) {
     <div ref={root} className="mw-anim absolute inset-0 overflow-hidden bg-[#08122a]" style={{ ["--mx" as any]: 0, ["--my" as any]: 0 }}>
       {/* optional photograph: drop frontend/public/login-hero.jpg to blend a real photo into the scene */}
       <div className="absolute inset-0 opacity-30 mix-blend-luminosity" style={{ backgroundImage: 'url("/login-hero.jpg")', backgroundSize: "cover", backgroundPosition: "center" }} />
-      <div className="mw-aurora absolute -left-24 -top-24 h-[55%] w-[60%] rounded-full bg-[#C7A45B]/25 blur-3xl" />
+      <div className="mw-aurora absolute -left-24 -top-24 h-[55%] w-[60%] rounded-full bg-[#55B848]/25 blur-3xl" />
       <div className="mw-aurora absolute -right-16 top-1/3 h-[50%] w-[45%] rounded-full bg-[#4B6FD1]/25 blur-3xl" style={{ animationDelay: "-6s" }} />
 
       <svg viewBox="0 0 1000 900" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden="true">
         <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060d22" /><stop offset=".55" stopColor="#0f2250" /><stop offset=".86" stopColor="#7a5a2c" /><stop offset="1" stopColor="#C7A45B" /></linearGradient>
-          <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stopColor="#FFE7A8" stopOpacity=".95" /><stop offset=".35" stopColor="#E9C46F" stopOpacity=".45" /><stop offset="1" stopColor="#C7A45B" stopOpacity="0" /></radialGradient>
-          <linearGradient id="curve" x1="0" x2="1"><stop offset="0" stopColor="#F0B38A" /><stop offset=".5" stopColor="#E9C46F" /><stop offset="1" stopColor="#9CE08A" /></linearGradient>
-          <linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#E9C46F" stopOpacity=".38" /><stop offset="1" stopColor="#E9C46F" stopOpacity="0" /></linearGradient>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#060d22" /><stop offset=".55" stopColor="#0f2250" /><stop offset=".86" stopColor="#7a5a2c" /><stop offset="1" stopColor="#55B848" /></linearGradient>
+          <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stopColor="#FFE7A8" stopOpacity=".95" /><stop offset=".35" stopColor="#8FD584" stopOpacity=".45" /><stop offset="1" stopColor="#55B848" stopOpacity="0" /></radialGradient>
+          <linearGradient id="curve" x1="0" x2="1"><stop offset="0" stopColor="#F0B38A" /><stop offset=".5" stopColor="#8FD584" /><stop offset="1" stopColor="#9CE08A" /></linearGradient>
+          <linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8FD584" stopOpacity=".38" /><stop offset="1" stopColor="#8FD584" stopOpacity="0" /></linearGradient>
           <linearGradient id="fx" x1="0" x2="1"><stop offset="0" stopColor="#fff" stopOpacity="0" /><stop offset=".2" stopColor="#fff" /><stop offset=".78" stopColor="#fff" /><stop offset="1" stopColor="#fff" stopOpacity="0" /></linearGradient>
           <mask id="fadeX" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="900"><rect x="110" width="780" height="900" fill="url(#fx)" /></mask>
           <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
@@ -101,7 +101,7 @@ export default function LoginHero({ compact = false }: { compact?: boolean }) {
             <g key={i}>
               <circle className="mw-ring" cx={m.at[0]} cy={m.at[1]} r="7" fill="none" stroke="#FFE7A8" strokeWidth="1.5" style={{ animationDelay: `${delay + 0.6}s` }} />
               <g className="mw-pop" style={{ animationDelay: `${delay}s` }}>
-                <circle cx={m.at[0]} cy={m.at[1]} r="8" fill="#fff" stroke="#E9C46F" strokeWidth="3" />
+                <circle cx={m.at[0]} cy={m.at[1]} r="8" fill="#fff" stroke="#8FD584" strokeWidth="3" />
                 <g transform={`translate(${m.at[0] + (m.dx ?? -62)}, ${m.at[1] + (m.below ? 20 : -56)})`}>
                   <rect width="124" height="38" rx="12" fill="#ffffff" fillOpacity=".14" stroke="#ffffff" strokeOpacity=".3" />
                   <text x="62" y="16" textAnchor="middle" fontSize="12" fontWeight="600" fill="#fff" fontFamily="Inter, sans-serif">{m.label}</text>
@@ -116,8 +116,8 @@ export default function LoginHero({ compact = false }: { compact?: boolean }) {
 
       {!compact && (<>
         <div className="absolute inset-x-0 top-0 p-10 xl:p-14 text-white pointer-events-none">
-          <div className="mw-rise" style={{ animationDelay: ".1s" }}><div className="font-serif text-3xl leading-none">MetaWealth</div><div className="text-[11px] tracking-[0.34em] text-[#E9C46F] mt-2">CAPITAL</div></div>
-          <h1 className="font-serif text-[2.6rem] xl:text-5xl leading-[1.1] mt-12 max-w-2xl min-h-[2.2em] mw-rise" style={{ animationDelay: ".35s" }}>One plan for<br />your <span key={w} className="inline-block text-[#E9C46F] mw-rise" style={{ animationDelay: "0s", animationDuration: ".6s" }}>{WORDS[w]}</span>.</h1>
+          <div className="mw-rise" style={{ animationDelay: ".1s" }}><img src="/logo-light.png" alt="MetaWealth Capital" className="h-14 w-auto" /></div>
+          <h1 className="font-serif text-[2.6rem] xl:text-5xl leading-[1.1] mt-12 max-w-2xl min-h-[2.2em] mw-rise" style={{ animationDelay: ".35s" }}>One plan for<br />your <span key={w} className="inline-block text-[#8FD584] mw-rise" style={{ animationDelay: "0s", animationDuration: ".6s" }}>{WORDS[w]}</span>.</h1>
           <p className="mt-4 max-w-sm text-white/70 text-[15px] mw-rise" style={{ animationDelay: ".6s" }}>Wherever you earn, in rupees or dirhams or dollars, your advisor plans it as one.</p>
         </div>
         {/* illustrative live card */}
@@ -127,11 +127,11 @@ export default function LoginHero({ compact = false }: { compact?: boolean }) {
             <div className="mt-3 text-[11px] text-white/60">Net worth</div><div className="text-3xl font-semibold tabular-nums">{fmt(nw)}</div>
             <svg viewBox="0 0 200 44" className="w-full mt-2"><path d="M0 40 C 30 38 50 30 80 26 S 130 18 200 4" fill="none" stroke="#9CE08A" strokeWidth="2.5" strokeLinecap="round" pathLength={1} className="mw-draw" style={{ animationDelay: "1.6s" }} /></svg>
             <div className="mt-3 flex items-center justify-between text-xs"><span className="text-white/70">Goals on track</span><b>12 / 14</b></div>
-            <div className="mt-2 flex flex-wrap gap-1">{Array.from({ length: 14 }, (_, i) => <i key={i} className="h-2.5 w-2.5 rounded-[4px]" style={{ background: i < 12 ? "#9CE08A" : i === 12 ? "#E9C46F" : "#F0B38A" }} />)}</div>
+            <div className="mt-2 flex flex-wrap gap-1">{Array.from({ length: 14 }, (_, i) => <i key={i} className="h-2.5 w-2.5 rounded-[4px]" style={{ background: i < 12 ? "#9CE08A" : i === 12 ? "#8FD584" : "#F0B38A" }} />)}</div>
           </div>
         </div>
         <div className="absolute left-0 bottom-0 p-10 xl:p-14 flex flex-wrap gap-3 text-xs text-white/85">
-          {[[ShieldCheck, "Advisor-reviewed plans"], [Globe2, "INR · USD · AED"], [Lock, "Protected sign-in"]].map(([I, t]: any, i) => <span key={t} className="mw-rise inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-2" style={{ animationDelay: `${1.6 + i * 0.15}s` }}><I size={14} className="text-[#E9C46F]" />{t}</span>)}
+          {[[ShieldCheck, "Advisor-reviewed plans"], [Globe2, "INR · USD · AED"], [Lock, "Protected sign-in"]].map(([I, t]: any, i) => <span key={t} className="mw-rise inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-3.5 py-2" style={{ animationDelay: `${1.6 + i * 0.15}s` }}><I size={14} className="text-[#8FD584]" />{t}</span>)}
         </div>
       </>)}
     </div>

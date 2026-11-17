@@ -12,7 +12,7 @@ const set = (o: any, path: string, v: any) => { const c = structuredClone(o ?? {
 function Input({ f, value, onChange }: { f: Field; value: any; onChange: (v: any) => void }) {
   const cls = "w-full border border-line rounded-md px-2.5 py-2 bg-white text-sm";
   if (f.type === "select") return <select className={cls} value={value ?? ""} onChange={(e) => onChange(e.target.value)}>{f.options!.map((o) => <option key={o}>{o}</option>)}</select>;
-  if (f.type === "checkbox") return <input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-[#101D35]" />;
+  if (f.type === "checkbox") return <input type="checkbox" checked={!!value} onChange={(e) => onChange(e.target.checked)} className="h-5 w-5 accent-[#1A5876]" />;
   return <input className={cls} type={f.type ?? "text"} value={value ?? ""} onChange={(e) => onChange(f.type === "number" ? (e.target.value === "" ? "" : Number(e.target.value)) : e.target.value)} />;
 }
 

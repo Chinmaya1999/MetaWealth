@@ -35,7 +35,7 @@ export default function PortalLayout({ title, nav, action }: { title: string; na
   const flat = nav.flatMap((n) => (n.children ? n.children : [{ to: n.to, label: n.label }])); // search + mobile nav list real pages only
   const match = q ? flat.find((n) => n.label.toLowerCase().includes(q.toLowerCase())) : undefined;
   const initials = (user?.name ?? "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
-  const Avatar = ({ size = "h-9 w-9" }: { size?: string }) => <span className={`${size} rounded-full grid place-items-center text-xs font-semibold text-white shrink-0`} style={{ background: "linear-gradient(135deg,#101D35,#C7A45B)" }}>{initials}</span>;
+  const Avatar = ({ size = "h-9 w-9" }: { size?: string }) => <span className={`${size} rounded-full grid place-items-center text-xs font-semibold text-white shrink-0`} style={{ background: "linear-gradient(135deg,#1A5876,#55B848)" }}>{initials}</span>;
   const Badge = ({ n }: { n: number }) => n > 0 ? <span className="ml-auto grid place-items-center h-5 min-w-5 px-1 rounded-full bg-navy text-white text-[10px] font-semibold">{n}</span> : null;
 
   const linkCls = (active: boolean) => `relative flex items-center gap-3 rounded-2xl px-3.5 py-2.5 text-sm whitespace-nowrap transition-all ${active ? "bg-white shadow-clay text-navy font-medium" : "text-muted hover:bg-white/60 hover:text-navy"} ${collapsed ? "justify-center px-0" : ""}`;
@@ -47,7 +47,7 @@ export default function PortalLayout({ title, nav, action }: { title: string; na
         {/* ---------- sidebar (desktop) ---------- */}
         <aside className={`print:hidden hidden md:flex flex-col shrink-0 p-4 transition-[width] duration-300 md:h-full overflow-y-auto scroll-soft border-r border-white/60 bg-white/30 ${collapsed ? "w-[84px]" : "w-64"}`}>
           <div className={`pt-2 pb-6 ${collapsed ? "text-center" : "px-3"}`}>
-            {collapsed ? <div className="font-serif text-2xl text-navy">M</div> : <><div className="font-serif text-2xl text-navy leading-none">MetaWealth</div><div className="text-[10px] tracking-[0.3em] text-gold mt-1.5">CAPITAL · {title.toUpperCase()}</div></>}
+            {collapsed ? <img src="/logo-mark.png" alt="MetaWealth Capital" className="h-9 mx-auto" /> : <><img src="/logo.png" alt="MetaWealth Capital" className="h-10 w-auto" /><div className="text-[10px] tracking-[0.3em] text-gold mt-1.5">{title.toUpperCase()}</div></>}
           </div>
           <nav aria-label="Primary" className="flex flex-col gap-1">
             {[...nav.filter((x) => !x.secondary), { divider: true } as any, ...nav.filter((x) => x.secondary)].map((n: any) => {
@@ -90,7 +90,7 @@ export default function PortalLayout({ title, nav, action }: { title: string; na
         <div className="flex-1 min-w-0 md:h-full flex flex-col px-3 py-3 md:px-7 md:py-5">
           {/* ---------- mobile nav ---------- */}
           <div className="md:hidden print:hidden mb-3">
-            <div className="font-serif text-xl text-navy mb-2">MetaWealth <span className="text-[10px] tracking-[0.25em] text-gold">{title.toUpperCase()}</span></div>
+            <div className="flex items-center gap-2 mb-2"><img src="/logo.png" alt="MetaWealth Capital" className="h-7 w-auto" /><span className="text-[10px] tracking-[0.25em] text-gold">{title.toUpperCase()}</span></div>
             <nav aria-label="Primary" className="flex gap-1.5 overflow-x-auto pb-1">{flat.map((n) => <NavLink key={n.to} to={n.to} end className={({ isActive }) => `rounded-full px-3.5 py-2 text-xs whitespace-nowrap ${isActive ? "bg-white shadow-clay text-navy font-medium" : "text-muted bg-white/40"}`}>{n.label}</NavLink>)}</nav>
           </div>
 
@@ -98,7 +98,7 @@ export default function PortalLayout({ title, nav, action }: { title: string; na
           <header className="print:hidden flex items-center gap-2 md:gap-3 mb-4 shrink-0">
             <form onSubmit={(e) => { e.preventDefault(); if (match) { go(match.to); setQ(""); } }} className="flex-1 max-w-md relative">
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
-              <input aria-label="Quick search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Quick search" className="w-full rounded-2xl bg-white/80 border border-white shadow-[inset_0_2px_4px_rgba(16,29,53,.06)] pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-gold/50" />
+              <input aria-label="Quick search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Quick search" className="w-full rounded-2xl bg-white/80 border border-white shadow-[inset_0_2px_4px_rgba(26,88,118,.06)] pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-gold/50" />
               {q && <div className="absolute z-40 mt-2 w-full clay p-1.5 text-sm">{match ? <button type="button" onClick={() => { go(match.to); setQ(""); }} className="w-full text-left px-3 py-2 rounded-xl hover:bg-white">{match.label}</button> : <div className="px-3 py-2 text-muted">No match</div>}</div>}
             </form>
             <div className="ml-auto flex items-center gap-2 md:gap-3">

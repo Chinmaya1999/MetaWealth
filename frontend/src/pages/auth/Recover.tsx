@@ -3,8 +3,8 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 const shell = (title: string, sub: string, children: React.ReactNode) => (
-  <div className="min-h-screen grid place-items-center px-6 bg-[#F6F3EC]" style={{ background: "radial-gradient(900px 500px at 100% 0%, rgba(199,164,91,.22), transparent 60%), #F6F3EC" }}>
-    <div className="w-full max-w-[400px] clay p-8"><div className="font-serif text-2xl text-navy">MetaWealth</div><div className="text-[10px] tracking-[0.3em] text-gold mb-6">CAPITAL</div>
+  <div className="min-h-screen grid place-items-center px-6 bg-[#F6F3EC]" style={{ background: "radial-gradient(900px 500px at 100% 0%, rgba(85,184,72,.22), transparent 60%), #F6F3EC" }}>
+    <div className="w-full max-w-[400px] clay p-8"><img src="/logo.png" alt="MetaWealth Capital" className="h-10 w-auto mb-6" />
       <h1 className="font-serif text-3xl text-navy">{title}</h1><p className="text-muted text-sm mt-2 mb-6">{sub}</p>{children}
       <Link to="/login" className="block text-center text-sm text-navy mt-6 hover:underline">← Back to sign in</Link></div></div>);
 const inp = "w-full rounded-2xl bg-white border border-[#E4E0D6] px-4 py-3 text-[15px] outline-none focus:border-gold focus:ring-4 focus:ring-gold/20";

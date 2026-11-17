@@ -61,7 +61,7 @@ export default function PlanDocument({ plan }: { plan: any }) {
 
   return (<div className="min-w-0 max-w-5xl">
     {/* cover */}
-    <div className="relative overflow-hidden rounded-xl3 p-8 mb-6 text-white shadow-clay" style={{ background: "linear-gradient(135deg,#101D35 0%,#24385c 62%,#6b5a2f 140%)" }}><div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/25 blur-2xl" />
+    <div className="relative overflow-hidden rounded-xl3 p-8 mb-6 text-white shadow-clay" style={{ background: "linear-gradient(135deg,#1A5876 0%,#24385c 62%,#6b5a2f 140%)" }}><div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/25 blur-2xl" />
       <div className="text-[11px] tracking-[0.3em] text-gold">METAWEALTH CAPITAL</div>
       <h1 className="font-serif text-4xl mt-2">Financial Plan</h1>
       <p className="text-lg mt-1">Prepared for {name}</p>

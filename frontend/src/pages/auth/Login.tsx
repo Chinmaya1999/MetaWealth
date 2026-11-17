@@ -25,15 +25,15 @@ export default function Login() {
     } catch (x: any) { setErr(x.response?.status === 429 ? "Too many attempts. Please wait a few minutes and try again." : x.response?.data?.error?.message ?? "Sign-in failed. Please try again."); setShake((n) => n + 1); }
     finally { setBusy(false); }
   }
-  const field = "peer w-full rounded-2xl bg-white border border-[#E4E0D6] pl-12 pr-4 pt-6 pb-2.5 text-[15px] outline-none shadow-[inset_0_1px_2px_rgba(16,29,53,.05)] transition focus:border-gold focus:ring-4 focus:ring-gold/20";
+  const field = "peer w-full rounded-2xl bg-white border border-[#E4E0D6] pl-12 pr-4 pt-6 pb-2.5 text-[15px] outline-none shadow-[inset_0_1px_2px_rgba(26,88,118,.05)] transition focus:border-gold focus:ring-4 focus:ring-gold/20";
   const label = "pointer-events-none absolute left-12 top-4 text-sm text-muted transition-all peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-gold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]";
 
   return (
     <div className="min-h-screen md:grid md:grid-cols-[1.35fr_1fr] bg-[#F6F3EC]">
       <div className="relative h-52 md:h-auto md:min-h-screen overflow-hidden"><LoginHero compact={typeof window !== "undefined" && window.innerWidth < 768} />
-        <div className="md:hidden absolute inset-0 p-5 text-white"><div className="font-serif text-2xl">MetaWealth</div><div className="text-[10px] tracking-[0.3em] text-[#E9C46F]">CAPITAL</div></div></div>
+        <div className="md:hidden absolute inset-0 p-5 text-white"><img src="/logo-light.png" alt="MetaWealth Capital" className="h-10 w-auto" /></div></div>
 
-      <div className="relative flex items-center justify-center px-6 py-10 md:px-12 overflow-hidden" style={{ background: "radial-gradient(900px 500px at 100% 0%, rgba(199,164,91,.22), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgba(109,134,185,.16), transparent 60%), #F6F3EC" }}>
+      <div className="relative flex items-center justify-center px-6 py-10 md:px-12 overflow-hidden" style={{ background: "radial-gradient(900px 500px at 100% 0%, rgba(85,184,72,.22), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgba(109,134,185,.16), transparent 60%), #F6F3EC" }}>
         <form key={shake} onSubmit={submit} className={`w-full max-w-[400px] ${shake ? "mw-shake" : ""}`} noValidate>
           <div className="mw-rise" style={{ animationDelay: ".1s" }}>
             <div className="chip mb-4">{greeting()}</div>
@@ -58,13 +58,13 @@ export default function Login() {
           </div>
 
           <div className="mt-4 flex items-center justify-between text-sm mw-rise" style={{ animationDelay: ".45s" }}>
-            <label className="flex items-center gap-2.5 cursor-pointer select-none text-muted"><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="h-4 w-4 rounded accent-[#101D35]" />Remember my email</label>
+            <label className="flex items-center gap-2.5 cursor-pointer select-none text-muted"><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="h-4 w-4 rounded accent-[#1A5876]" />Remember my email</label>
             <Link to="/forgot-password" className="text-navy font-medium hover:underline">Forgot password?</Link>
           </div>
 
           {err && <div role="alert" className="mt-4 flex items-start gap-2.5 rounded-2xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-danger"><AlertCircle size={17} className="mt-0.5 shrink-0" />{err}</div>}
 
-          <button disabled={busy || ok} className={`mw-shine relative overflow-hidden mt-6 w-full rounded-2xl py-3.5 text-[15px] font-semibold text-white shadow-[0_18px_30px_-12px_rgba(16,29,53,.7)] transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-90 mw-rise ${ok ? "bg-success" : "bg-navy hover:bg-navy-deep"}`} style={{ animationDelay: ".55s" }}>
+          <button disabled={busy || ok} className={`mw-shine relative overflow-hidden mt-6 w-full rounded-2xl py-3.5 text-[15px] font-semibold text-white shadow-[0_18px_30px_-12px_rgba(26,88,118,.7)] transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-90 mw-rise ${ok ? "bg-success" : "bg-navy hover:bg-navy-deep"}`} style={{ animationDelay: ".55s" }}>
             <span className="relative z-10 inline-flex items-center justify-center gap-2.5">
               {ok ? <><Check size={18} /> Signed in. Opening your dashboard…</> : busy ? <><span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" /> Signing in…</> : <>Sign in <ArrowRight size={18} /></>}
             </span>

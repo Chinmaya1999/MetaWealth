@@ -11,7 +11,7 @@
     <circle cx="1560" cy="900" r="240" fill="#F0B38A" opacity=".45"/>
     <circle cx="60" cy="860" r="220" fill="#7E93C2" opacity=".35"/>
   </g>
-  <g opacity=".10" fill="none" stroke="#101D35" stroke-width="1.2">
+  <g opacity=".10" fill="none" stroke="#1A5876" stroke-width="1.2">
     <path d="M-50 640 C 300 520, 600 760, 960 620 S 1500 560, 1700 660"/>
     <path d="M-50 700 C 300 580, 600 820, 960 680 S 1500 620, 1700 720"/>
     <path d="M-50 760 C 300 640, 600 880, 960 740 S 1500 680, 1700 780"/>

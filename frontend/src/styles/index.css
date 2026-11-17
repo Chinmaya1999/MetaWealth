@@ -14,19 +14,19 @@ html { overflow: hidden; }
 @media (min-width: 2400px) { html { font-size: 20px; } }
 @media (min-width: 3200px) { html { font-size: 26px; } }
 @media (max-width: 767px), print { html { overflow: auto; } }
-.scroll-soft { scrollbar-width: thin; scrollbar-color: rgba(16,29,53,.22) transparent; }
-.scroll-soft::-webkit-scrollbar { width: 8px; } .scroll-soft::-webkit-scrollbar-thumb { background: rgba(16,29,53,.2); border-radius: 8px; }
-:focus-visible { outline: 2px solid #C7A45B; outline-offset: 2px; }
+.scroll-soft { scrollbar-width: thin; scrollbar-color: rgba(26,88,118,.22) transparent; }
+.scroll-soft::-webkit-scrollbar { width: 8px; } .scroll-soft::-webkit-scrollbar-thumb { background: rgba(26,88,118,.2); border-radius: 8px; }
+:focus-visible { outline: 2px solid #55B848; outline-offset: 2px; }
 
 @layer components {
   .clay { @apply rounded-xl2 border border-white/70 bg-white/70 backdrop-blur-xl shadow-clay; }
   .clay-flat { @apply rounded-xl2 border border-white/60 bg-white/55 backdrop-blur-lg; }
   .clay-inset { @apply rounded-2xl bg-[#EFEDE6] shadow-clayPress; }
   .clay-btn { @apply rounded-2xl bg-white/80 border border-white/80 shadow-clay transition-all duration-200 hover:-translate-y-0.5 hover:bg-white active:shadow-clayPress active:translate-y-0; }
-  .pill-btn { @apply rounded-full bg-navy text-white px-4 py-2 text-sm font-medium shadow-[0_10px_20px_-8px_rgba(16,29,53,.6)] transition hover:bg-navy-deep hover:-translate-y-0.5; }
+  .pill-btn { @apply rounded-full bg-navy text-white px-4 py-2 text-sm font-medium shadow-[0_10px_20px_-8px_rgba(26,88,118,.6)] transition hover:bg-navy-deep hover:-translate-y-0.5; }
   .chip { @apply inline-flex items-center rounded-full bg-white/70 border border-white/80 px-2.5 py-1 text-[11px] font-medium text-muted shadow-[inset_0_1px_0_rgba(255,255,255,.9)]; }
-  .progress { @apply h-3.5 rounded-full bg-[#E7E4DB] shadow-[inset_0_2px_4px_rgba(16,29,53,.10)] overflow-hidden; }
-  .progress > i { @apply block h-full rounded-full; background-color: #C7A45B; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.28) 0 4px, rgba(255,255,255,0) 4px 8px), linear-gradient(90deg,#C7A45B,#E3C77F); }
+  .progress { @apply h-3.5 rounded-full bg-[#E7E4DB] shadow-[inset_0_2px_4px_rgba(26,88,118,.10)] overflow-hidden; }
+  .progress > i { @apply block h-full rounded-full; background-color: #55B848; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.28) 0 4px, rgba(255,255,255,0) 4px 8px), linear-gradient(90deg,#55B848,#E3C77F); }
 }
 @media print { body { background: #fff !important; } .clay, .clay-flat { box-shadow: none !important; backdrop-filter: none !important; background: #fff !important; } }
 

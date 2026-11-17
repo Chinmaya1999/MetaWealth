@@ -17,7 +17,7 @@ export async function htmlToPdf(html: string, clientName: string, brandName = "M
     const page = await browser.newPage(); await page.setContent(html, { waitUntil: "load" });
     const safe = clientName.replace(/[<>&"]/g, "");
     return Buffer.from(await page.pdf({ format: "A4", printBackground: true, displayHeaderFooter: true,
-      headerTemplate: `<div style="font-size:8px;width:100%;padding:0 12mm;color:#728096;display:flex;justify-content:space-between"><span>${brandName}</span><span style="color:#C7A45B;letter-spacing:2px">CONFIDENTIAL</span><span>${safe}</span></div>`,
+      headerTemplate: `<div style="font-size:8px;width:100%;padding:0 12mm;color:#728096;display:flex;justify-content:space-between"><span>${brandName}</span><span style="color:#55B848;letter-spacing:2px">CONFIDENTIAL</span><span>${safe}</span></div>`,
       footerTemplate: `<div style="font-size:8px;width:100%;padding:0 12mm;color:#728096;text-align:center">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>`,
       margin: { top: "18mm", bottom: "16mm", left: "12mm", right: "12mm" } }));
   } finally { await browser.close(); }
