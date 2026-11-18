@@ -8,3 +8,5 @@ dist
 coverage
 backend/storage
 .chrome
+*.pem
+*.key

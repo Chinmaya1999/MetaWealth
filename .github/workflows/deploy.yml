@@ -1,0 +1,144 @@
+name: CI/CD - Build and Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build & push API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infrastructure/docker/backend.Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/mwc-api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/mwc-api:${{ github.sha }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,scope=api,mode=max
+      - name: Build & push Web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infrastructure/docker/frontend.Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/mwc-web:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/mwc-web:${{ github.sha }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,scope=web,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/deploy.pem
+          chmod 600 ~/.ssh/deploy.pem
+          ssh-keyscan -T 15 -H "$HOST" >> ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<CFG
+          Host target
+            HostName $HOST
+            User $EC2_USER
+            IdentityFile ~/.ssh/deploy.pem
+            ServerAliveInterval 30
+            ConnectTimeout 20
+          CFG
+          sed -i 's/^ *//' ~/.ssh/config
+
+      - name: Install server dependencies (Docker, Compose)
+        run: |
+          ssh target 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          if ! command -v docker >/dev/null; then
+            echo ">> installing docker"
+            if command -v dnf >/dev/null; then sudo dnf install -y docker
+            elif command -v yum >/dev/null; then sudo yum install -y docker
+            else sudo apt-get update && sudo apt-get install -y docker.io; fi
+          fi
+          sudo systemctl enable --now docker
+          sudo usermod -aG docker "$USER" || true
+          if ! sudo docker compose version >/dev/null 2>&1; then
+            echo ">> installing docker compose plugin"
+            sudo mkdir -p /usr/local/lib/docker/cli-plugins
+            sudo curl -fsSL "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
+            sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+          fi
+          sudo docker --version && sudo docker compose version
+          mkdir -p ~/metawealth
+          REMOTE
+
+      - name: Upload compose file and environment
+        run: |
+          # Build the server .env from GitHub secrets (never committed)
+          umask 077
+          {
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}"
+            echo "IMAGE_TAG=${{ github.sha }}"
+            echo "WEB_ORIGIN=${{ secrets.WEB_ORIGIN }}"
+            echo "COOKIE_SECURE=${{ secrets.COOKIE_SECURE }}"
+            echo "MONGODB_URI=${{ secrets.MONGODB_URI }}"
+            echo "JWT_ACCESS_SECRET=${{ secrets.JWT_ACCESS_SECRET }}"
+            echo "JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}"
+            echo "ACCESS_TTL=${{ secrets.ACCESS_TTL }}"
+            echo "REFRESH_TTL_DAYS=${{ secrets.REFRESH_TTL_DAYS }}"
+            echo "DATA_ENCRYPTION_KEY=${{ secrets.DATA_ENCRYPTION_KEY }}"
+            echo "SMTP_URL=${{ secrets.SMTP_URL }}"
+            echo "MAIL_FROM=${{ secrets.MAIL_FROM }}"
+          } > server.env
+          scp docker-compose.prod.yml target:metawealth/docker-compose.yml
+          scp server.env target:metawealth/.env
+          rm -f server.env
+
+      - name: Pull images and restart containers
+        run: |
+          ssh target 'bash -s' <<'REMOTE'
+          set -euo pipefail
+          cd ~/metawealth
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          sudo docker compose pull
+          sudo docker compose up -d --remove-orphans
+          sudo docker image prune -f
+          sudo docker compose ps
+          REMOTE
+
+      - name: Health check
+        run: |
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://$HOST/api/v1/health" || true)
+            echo "attempt $i: HTTP $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "::error::Health check failed - dumping container logs"
+          ssh target 'cd ~/metawealth && sudo docker compose ps && sudo docker compose logs --tail=100' || true
+          exit 1
+
+      - name: Rollback hint on failure
+        if: failure()
+        run: ssh target 'cd ~/metawealth && sudo docker compose logs --tail=80' || true

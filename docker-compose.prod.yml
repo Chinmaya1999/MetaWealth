@@ -1,0 +1,16 @@
+# Used on the EC2 server by the CD pipeline. Images come from Docker Hub; env comes from ./.env (written by CI from GitHub secrets).
+services:
+  api:
+    image: ${DOCKERHUB_USERNAME}/mwc-api:${IMAGE_TAG:-latest}
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+    volumes: [ "uploads:/app/backend/storage" ]
+    restart: unless-stopped
+  web:
+    image: ${DOCKERHUB_USERNAME}/mwc-web:${IMAGE_TAG:-latest}
+    ports: [ "80:80" ]
+    depends_on: [ api ]
+    restart: unless-stopped
+volumes: { uploads: {} }

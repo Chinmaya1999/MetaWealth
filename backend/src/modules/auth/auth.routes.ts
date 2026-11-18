@@ -16,7 +16,7 @@ import { sendMail } from "../../utils/mailer";
 
 export const authRouter = Router();
 const COOKIE = "mwc_rt";
-const cookieOpts = { httpOnly: true, secure: env.NODE_ENV === "production", sameSite: "strict" as const, path: "/api/v1/auth", maxAge: env.REFRESH_TTL_DAYS * 86400_000 };
+const cookieOpts = { httpOnly: true, secure: env.COOKIE_SECURE ? env.COOKIE_SECURE === "true" : env.NODE_ENV === "production", sameSite: "strict" as const, path: "/api/v1/auth", maxAge: env.REFRESH_TTL_DAYS * 86400_000 };
 const limiter = rateLimit({ windowMs: 15 * 60_000, limit: 30, standardHeaders: true, legacyHeaders: false });
 const MAX_FAILS = 5;
 
