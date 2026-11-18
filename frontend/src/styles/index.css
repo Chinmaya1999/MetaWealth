@@ -36,6 +36,9 @@ html { overflow: hidden; }
 @keyframes mw-pop { 0% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes mw-twinkle { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
 @keyframes mw-floatup { 0% { transform: translateY(0); opacity: 0; } 12% { opacity: .85; } 100% { transform: translateY(-560px); opacity: 0; } }
+@keyframes mw-grow { to { transform: scaleY(1); } }
+@keyframes mw-gridmove { to { transform: translateX(-50px); } }
+@keyframes mw-seg { from { stroke-dasharray: 0 101.5; } }
 @keyframes mw-flow { to { stroke-dashoffset: -48; } }
 @keyframes mw-ring { 0% { transform: scale(1); opacity: .65; } 100% { transform: scale(3.2); opacity: 0; } }
 @keyframes mw-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -50,6 +53,9 @@ html { overflow: hidden; }
 .mw-ring { transform-box: fill-box; transform-origin: center; animation: mw-ring 2.4s ease-out infinite; }
 .mw-tw { animation: mw-twinkle 3s ease-in-out infinite; }
 .mw-coin { animation: mw-floatup 11s linear infinite; }
+.mw-candle { transform-box: fill-box; transform-origin: bottom; transform: scaleY(0); animation: mw-grow .7s cubic-bezier(.2, .9, .3, 1) forwards; }
+.mw-gridmove { animation: mw-gridmove 12s linear infinite; }
+.mw-seg { animation: mw-seg 1.4s cubic-bezier(.65, 0, .35, 1) backwards; }
 .mw-flow { stroke-dasharray: 6 10; animation: mw-flow 2.2s linear infinite; }
 .mw-rise { opacity: 0; animation: mw-rise .7s cubic-bezier(.2, .8, .2, 1) forwards; }
 .mw-shake { animation: mw-shake .45s ease; }
@@ -61,6 +67,7 @@ html { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .mw-draw { animation: none; stroke-dashoffset: 0; }
   .mw-area { animation: none; opacity: 1; } .mw-pop { animation: none; transform: none; opacity: 1; }
+  .mw-seg { animation: none; } .mw-candle { animation: none; transform: none; } .mw-gridmove { animation: none; }
   .mw-ring, .mw-tw, .mw-coin, .mw-flow, .mw-sun, .mw-aurora, .mw-shine::after { animation: none !important; }
   .mw-rise { animation: none; opacity: 1; } .mw-layer { transition: none; }
 }
